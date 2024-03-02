@@ -47,19 +47,23 @@
 
 - オブジェクトの省略記法。オブジェクトのプロパティ名と値が同じ名前の時は値を省略できる。
 
+  ```
     const name = "じゃけぇ";
     const age = 31;
     const myProfile = {
       name: name,
       age: age
     };
+  ```
 
     上記のコードを以下のように省略することができる。
+  ```
     const myProfile = {
       name,
       age
     };
     console.log(myProfile);
+  ```
 
 - スプレッド構文を使用してコピーすると参照が引き継がれない。
 

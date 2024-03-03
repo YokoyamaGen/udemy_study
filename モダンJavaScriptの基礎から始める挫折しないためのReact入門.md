@@ -89,3 +89,114 @@
     return num % 2 === 1;
   });
   console.log(newNameArr);
+
+
+- React
+  以下コードのStrictModeのように記述するとReactの構文を厳密にチェックする。
+
+  ```
+  import { StrictMode } from "react";
+  import { createRoot } from "react-dom/client";
+  import { App } from "./App";
+
+  const rootElement = document.getElementById("root");
+
+  const root = createRoot(rootElement);
+
+  root.render(
+    <StrictMode>
+      <App />
+    </StrictMode>
+  );
+  ```
+
+
+  - ReactでonClickイベントを定義するには{}で囲って、その中で関数を定義する。また、CSSをあてる際にもstyle={}の中で定義する。
+  ```
+  export const App = () => {
+    const onclickButton = () => alert();
+    const contentStyle = {
+      color: "blue",
+      fontSize: "18px",
+      margin: 100,
+    };
+    return (
+      <>
+        <h1>こんちは</h1>
+        <p style={contentStyle}>お元気ですか?</p>
+        <button onClick={onclickButton}>OK</button>
+      </>
+    );
+  };
+
+  ```
+
+  - Vue.jsのようにReactでもpropsを使用して、親から子供のコンポーネントに値を渡せる。以下コードではcolor="blue"と「こんちは」をColorfulMessageコンポーネントに渡している。
+
+  ```
+    import { ColorfulMessage } from "./components/ColorfulMessage";
+    export const App = () => {
+      const onclickButton = () => alert();
+      return (
+        <>
+          <ColorfulMessage color="blue">こんちは</ColorfulMessage>
+          <ColorfulMessage color="green"> こんちは！</ColorfulMessage>
+          <button onClick={onclickButton}>OK</button>
+        </>
+      );
+    };
+
+  ```
+
+  以下、子供のコンポーネントのpropsを使用して、分割代入して、color, childrenで親から受け取った値を使用できる。
+  また、color,はオブジェクトの省略記法を使っている。color: color,と書かなくても良い。<ColorfulMessage color="green"> こんちは！</ColorfulMessage>のようにコンポーネントで囲まれた文字はprops.childrenで取得できる。
+
+  ```
+    export const ColorfulMessage = (props) => {
+    const { color, children } = props;
+    const contentStyleA = {
+      color,
+      fontSize: "18px",
+    };
+      return <p style={contentStyleA}>{children}</p>;
+    };
+
+  ```
+
+
+  - useStateを使用することでコンポーネントの状態を管理できる。useStateはコンポーネントの中の最上位にしか定義できない。関数の中では定義できない。
+    setNumでstateを更新する。
+
+  ```
+    import { useState } from "react";
+    import { ColorfulMessage } from "./components/ColorfulMessage";
+    export const App = () => {
+      const [num, setNum] = useState(0);
+      const onclickButton = () => setNum((prev) => prev + 1);
+      return (
+        <>
+          <ColorfulMessage color="blue">こんちは</ColorfulMessage>
+          <ColorfulMessage color="green"> こんちは！</ColorfulMessage>
+          <button onClick={onclickButton}>OK</button>
+          <p>{num}</p>
+        </>
+      );
+    };
+  ```
+
+  - 再レンダリングされるのは以下3つのタイミング
+    - stateが変更された時。
+    - 親コンポーネントが変更された時。
+    - propsに渡される値が変わった時。
+
+  - useEffectは指定した変数の値が変更した時のみ中で定義したロジックが動く。
+
+    ```
+      const [num, setNum] = useState(0);
+      useEffect (() => {
+        console.log("--useEffect--");
+      }, [num]);
+    ```
+
+  - named exportをインポートする際には指定した名前を指定しなければならない。一方、default exportはインポートした先で自分で名前を定義できる。
+
